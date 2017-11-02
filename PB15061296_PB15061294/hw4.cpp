@@ -18,7 +18,7 @@ if (NULL == binaryImg.data)
 	Mat thresholded_2(height_2, width_2, CV_8UC1);
 	int* xy = (int *)malloc((max_xy) * sizeof(int));
 	int max_xylen = 0;
-	for (int i = 0; i < height; i++)     //将binaryImg嵌入thresholded_2中
+	for (int i = 0; i < height; i++)    
 	{
 		int temp0 = (i + 1)*width_2;
 		int t_2 = i*width;
@@ -164,19 +164,18 @@ if (NULL == binaryImg.data)
 		soldiers.x = reference_x;
 		border.push_back(soldiers);
 		int b_m = 0;
-		for (b_m = 7; b_m >= 0; b_m--)     //以该边界点为中心，从相对编码7开始，沿顺时针寻找下一个边界点
+		for (b_m = 7; b_m >= 0; b_m--)    
 		{
 			int index = reference + deviation[b_m];
 			int pixvalue = thresholded_2.data[index];
 			if (pixvalue)
 			{
-				//int border_y= index / width_2 - 1;
 				reference_y += ch_y[b_m];
 				reference_x += ch_x[b_m];
 				soldiers.y = reference_y;
 				soldiers.x = reference_x;
 				border.push_back(soldiers);
-				reference = index;//将参考点改为当前找到的边界点
+				reference = index;
 				break;
 			}
 		}
@@ -184,18 +183,18 @@ if (NULL == binaryImg.data)
 		if (b_m == -1) {
 			indicator = 0;
 		}
-			int terminal = 0; //如果不是闭合边界，用terminal表示找到的轮廓终结点的数目（=2时程序结束）
+			int terminal = 0;
 			while (indicator)
 			{
 				int n = 0;
-				b_m = convert[b_m];//当前边界点相对于前一个边界点的编码为m,则将前一个边界点相对于当前边界点顺时针前进2个格子之后的相对编码为convert[m]
+				b_m = convert[b_m];
 				for (n = 0; n < 5; n++)
 				{
 					int index = reference + deviation[b_m];
 					int pixvalue = thresholded_2.data[index];
 					if (pixvalue)
 					{
-						if (index == reference_2)//说明已经回到原点
+						if (index == reference_2)
 						{
 							indicator = 0;
 							break;
@@ -211,7 +210,7 @@ if (NULL == binaryImg.data)
 							break;
 						}
 					}
-					b_m = binary_subtraction[b_m];//相对编码为m沿顺时针方向前进一格后的相对编码为binary_subtraction[m];
+					b_m = binary_subtraction[b_m];
 				}
 			}
 		contours.push_back(border);
